@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Download, Search, Target, TrendingUp, Building2, DollarSign, Filter, X, Database } from 'lucide-react';
+import { Download, Search, Target, TrendingUp, Building2, DollarSign, Filter, X, Building } from 'lucide-react';
 import InlineRating from '@/components/InlineRating';
 import FilterPanel from '@/components/FilterPanel';
 import ColumnSelector from '@/components/ColumnSelector';
@@ -172,7 +172,7 @@ export default function SimpleDashboard() {
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Database className="h-4 w-4" />
+                <Building className="h-4 w-4" />
                 <span>{companies.length} Companies</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
