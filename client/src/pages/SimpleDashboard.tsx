@@ -16,6 +16,7 @@ import CompanyDetailModal from '@/components/CompanyDetailModal';
 import GroupingSelector, { GroupByOption } from '@/components/GroupingSelector';
 import { defaultColumns, getVisibleColumns } from '@/lib/columnDefinitions';
 import { groupCompanies } from '@/lib/groupingUtils';
+import { getCompanyColor } from '@/lib/colorUtils';
 // import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 export default function SimpleDashboard() {
@@ -300,21 +301,18 @@ export default function SimpleDashboard() {
                           {col.id === 'myRating' ? (
                             <InlineRating company={company} />
                           ) : col.id === 'overallScore' ? (
-                            <Badge 
-                              className={
-                                (company['MA_Overall_Fit_Score'] || 0) >= 9 
-                                  ? 'bg-green-500/20 text-green-400 border-green-500/30' 
-                                  : (company['MA_Overall_Fit_Score'] || 0) >= 8
-                                  ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-                                  : 'bg-amber-500/20 text-amber-400 border-amber-500/30'
-                              }
-                            >
+                            <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold text-sm">
                               {formatScore(company['MA_Overall_Fit_Score'] || 0)}
-                            </Badge>
+                            </div>
                           ) : col.id === 'company' ? (
                             <div>
-                              <div className="font-medium text-foreground">{company['Company name']}</div>
-                              <div className="text-xs text-muted-foreground">{company['Business Type']}</div>
+                              <Badge 
+                                className="font-medium text-white mb-1"
+                                style={{ backgroundColor: getCompanyColor(company['Company name'] || '') }}
+                              >
+                                {company['Company name']}
+                              </Badge>
+                              <div className="text-xs text-muted-foreground mt-1">{company['Business Type']}</div>
                             </div>
                           ) : col.id === 'description' ? (
                             <div className="max-w-md line-clamp-2 text-xs text-muted-foreground">
