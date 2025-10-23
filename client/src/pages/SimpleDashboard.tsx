@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Download, Search, Target, TrendingUp, Building2, DollarSign, Filter, X } from 'lucide-react';
+import { Download, Search, Target, TrendingUp, Building2, DollarSign, Filter, X, Database } from 'lucide-react';
 import InlineRating from '@/components/InlineRating';
 import FilterPanel from '@/components/FilterPanel';
 import ColumnSelector from '@/components/ColumnSelector';
@@ -161,7 +161,7 @@ export default function SimpleDashboard() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
                   <Target className="h-6 w-6 text-white" />
                 </div>
               </div>
@@ -170,12 +170,15 @@ export default function SimpleDashboard() {
                 <p className="text-sm text-muted-foreground">Purpose Built Database</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                <span className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-                Live Data
-              </Badge>
-              <span className="text-sm text-muted-foreground">{companies.length} Companies</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Database className="h-4 w-4" />
+                <span>{companies.length} Companies</span>
+              </div>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span>Live Data</span>
+              </div>
             </div>
           </div>
         </div>
