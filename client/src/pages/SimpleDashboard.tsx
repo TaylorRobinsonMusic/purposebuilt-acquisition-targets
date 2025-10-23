@@ -160,9 +160,13 @@ export default function SimpleDashboard() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Target className="h-8 w-8 text-primary" />
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-teal-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                  <Target className="h-6 w-6 text-white" />
+                </div>
+              </div>
               <div>
-                <h1 className="text-2xl font-bold">Acquisition Targets</h1>
+                <h1 className="text-xl font-bold text-white">Acquisition Targets</h1>
                 <p className="text-sm text-muted-foreground">Purpose Built Database</p>
               </div>
             </div>
