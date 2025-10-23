@@ -262,7 +262,7 @@ export default function SimpleDashboard() {
 
           <Button variant="outline" onClick={() => exportToCSV(filteredCompanies)} className="gap-2">
             <Download className="h-4 w-4" />
-            Export CSV
+            CSV
           </Button>
         </div>
 
@@ -306,13 +306,8 @@ export default function SimpleDashboard() {
                             </div>
                           ) : col.id === 'company' ? (
                             <div>
-                              <Badge 
-                                className="font-medium text-white mb-1"
-                                style={{ backgroundColor: getCompanyColor(company['Company name'] || '') }}
-                              >
-                                {company['Company name']}
-                              </Badge>
-                              <div className="text-xs text-muted-foreground mt-1">{company['Business Type']}</div>
+                              <div className="font-medium text-foreground">{company['Company name']}</div>
+                              <div className="text-xs text-muted-foreground">{company['Business Type']}</div>
                             </div>
                           ) : col.id === 'description' ? (
                             <div className="max-w-md line-clamp-2 text-xs text-muted-foreground">
@@ -420,10 +415,16 @@ export default function SimpleDashboard() {
           <MapView companies={filteredCompanies} />
         )}
 
-        <div className="mt-4 text-center text-sm text-muted-foreground">
-          Showing {filteredCompanies.length} of {companies.length} companies
-          <span className="mx-2">•</span>
-          Showing {columns.length} of {defaultColumns.length} columns
+        <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground px-4">
+          <div className="flex items-center gap-2">
+            Showing {filteredCompanies.length} of {companies.length} companies
+            {filteredCompanies.length < companies.length && (
+              <Badge variant="secondary" className="text-xs">filtered</Badge>
+            )}
+          </div>
+          <div>
+            Showing {columns.length} of 119 columns
+          </div>
         </div>
       </div>
 

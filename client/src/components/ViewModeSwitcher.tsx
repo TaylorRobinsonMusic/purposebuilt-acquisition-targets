@@ -10,33 +10,30 @@ interface ViewModeSwitcherProps {
 
 export default function ViewModeSwitcher({ currentView, onViewChange }: ViewModeSwitcherProps) {
   return (
-    <div className="flex gap-1 border rounded-lg p-1">
+    <div className="flex gap-1">
       <Button
-        variant={currentView === 'table' ? 'default' : 'ghost'}
-        size="sm"
+        variant={currentView === 'table' ? 'default' : 'outline'}
+        size="icon"
         onClick={() => onViewChange('table')}
-        className="gap-2"
+        title="Table view"
       >
         <Table className="h-4 w-4" />
-        Table
       </Button>
       <Button
-        variant={currentView === 'cards' ? 'default' : 'ghost'}
-        size="sm"
+        variant={currentView === 'cards' ? 'default' : 'outline'}
+        size="icon"
         onClick={() => onViewChange('cards')}
-        className="gap-2"
+        title="Cards view"
       >
         <LayoutGrid className="h-4 w-4" />
-        Cards
       </Button>
       <Button
-        variant={currentView === 'map' ? 'default' : 'ghost'}
-        size="sm"
+        variant={currentView === 'map' ? 'default' : 'outline'}
+        size="icon"
         onClick={() => onViewChange('map')}
-        className="gap-2"
+        title="Map view"
       >
         <Map className="h-4 w-4" />
-        Map
       </Button>
     </div>
   );
