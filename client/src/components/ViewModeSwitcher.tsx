@@ -12,26 +12,29 @@ export default function ViewModeSwitcher({ currentView, onViewChange }: ViewMode
   return (
     <div className="flex gap-1">
       <Button
-        variant={currentView === 'table' ? 'default' : 'outline'}
+        variant="outline"
         size="icon"
         onClick={() => onViewChange('table')}
         title="Table view"
+        className={currentView === 'table' ? 'bg-blue-500 text-white hover:bg-blue-600' : 'hover:bg-muted'}
       >
         <Table className="h-4 w-4" />
       </Button>
       <Button
-        variant={currentView === 'cards' ? 'default' : 'outline'}
+        variant="outline"
         size="icon"
         onClick={() => onViewChange('cards')}
         title="Cards view"
+        className={currentView === 'cards' ? 'bg-purple-500 text-white hover:bg-purple-600' : 'hover:bg-muted'}
       >
         <LayoutGrid className="h-4 w-4" />
       </Button>
       <Button
-        variant={currentView === 'map' ? 'default' : 'outline'}
+        variant="outline"
         size="icon"
         onClick={() => onViewChange('map')}
         title="Map view"
+        className={currentView === 'map' ? 'bg-orange-500 text-white hover:bg-orange-600' : 'hover:bg-muted'}
       >
         <Map className="h-4 w-4" />
       </Button>

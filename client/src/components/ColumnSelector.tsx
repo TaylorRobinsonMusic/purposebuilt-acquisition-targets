@@ -69,7 +69,7 @@ export default function ColumnSelector({ columns, onColumnsChange }: ColumnSelec
         <Columns3 className="h-4 w-4" />
         Columns
         <Badge variant="secondary" className="ml-1">
-          {visibleCount}/{columns.length}
+          {visibleCount}
         </Badge>
       </Button>
 
