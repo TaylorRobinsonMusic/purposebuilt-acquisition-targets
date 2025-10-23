@@ -5,9 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Download, Search, Target, TrendingUp, Building2, DollarSign } from 'lucide-react';
+import { Download, Search, Target, TrendingUp, Building2, DollarSign, Filter, X } from 'lucide-react';
 import InlineRating from '@/components/InlineRating';
+import FilterPanel from '@/components/FilterPanel';
+import ColumnSelector from '@/components/ColumnSelector';
+import ViewModeSwitcher, { ViewMode } from '@/components/ViewModeSwitcher';
+import CardsView from '@/components/CardsView';
+import MapView from '@/components/MapView';
 import { defaultColumns, getVisibleColumns } from '@/lib/columnDefinitions';
+// import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 export default function SimpleDashboard() {
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -15,9 +21,22 @@ export default function SimpleDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [advancedFilters, setAdvancedFilters] = useState<any>({});
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('table');
+  const [columnConfig, setColumnConfig] = useState(() => 
+    defaultColumns.map(col => ({ ...col, visible: col.visible }))
+  );
+  // const [showFilterSheet, setShowFilterSheet] = useState(false);
 
-  const columns = getVisibleColumns(defaultColumns);
+  const columns = columnConfig.filter(col => col.visible);
+
+  // Extract unique values for filter options
+  const filterOptions = {
+    states: Array.from(new Set(companies.map(c => c.State_Province).filter(Boolean))),
+    businessTypes: Array.from(new Set(companies.map(c => c['Business Type']).filter(Boolean))),
+    ownershipTypes: Array.from(new Set(companies.map(c => c['Ownership Type']).filter(Boolean))),
+  };
 
   useEffect(() => {
     loadAcquisitionData()
@@ -34,7 +53,7 @@ export default function SimpleDashboard() {
   }, []);
 
   useEffect(() => {
-    const filters: Filters = { searchTerm };
+    const filters: Filters = { searchTerm, ...advancedFilters };
     let filtered = filterCompanies(companies, filters);
     
     if (sortConfig) {
@@ -61,7 +80,7 @@ export default function SimpleDashboard() {
     }
     
     setFilteredCompanies(filtered);
-  }, [companies, searchTerm, sortConfig]);
+  }, [companies, searchTerm, advancedFilters, sortConfig]);
 
   const handleSort = (accessor: string) => {
     setSortConfig(current => {
@@ -73,6 +92,15 @@ export default function SimpleDashboard() {
       }
       return null;
     });
+  };
+
+  const handleFiltersChange = (filters: any) => {
+    setAdvancedFilters(filters);
+  };
+
+  const clearAllFilters = () => {
+    setSearchTerm('');
+    setAdvancedFilters({});
   };
 
   const stats = {
@@ -87,6 +115,8 @@ export default function SimpleDashboard() {
       ? filteredCompanies.reduce((sum, c) => sum + (c['Estimated Profit Margin (%)'] || 0), 0) / filteredCompanies.length
       : 0,
   };
+
+  const activeFiltersCount = Object.keys(advancedFilters).length + (searchTerm ? 1 : 0);
 
   if (loading) {
     return (
@@ -199,13 +229,34 @@ export default function SimpleDashboard() {
               className="pl-10"
             />
           </div>
+          
+          <ViewModeSwitcher currentView={viewMode} onViewChange={setViewMode} />
+
+          <ColumnSelector columns={columnConfig} onColumnsChange={setColumnConfig} />
+
+          <Button variant="outline" className="gap-2" disabled>
+            <Filter className="h-4 w-4" />
+            Filters
+            {activeFiltersCount > 0 && (
+              <Badge variant="secondary" className="ml-1">{activeFiltersCount}</Badge>
+            )}
+          </Button>
+
+          {activeFiltersCount > 0 && (
+            <Button variant="outline" onClick={clearAllFilters} className="gap-2">
+              <X className="h-4 w-4" />
+              Clear All
+            </Button>
+          )}
+
           <Button variant="outline" onClick={() => exportToCSV(filteredCompanies)} className="gap-2">
             <Download className="h-4 w-4" />
             Export CSV
           </Button>
         </div>
 
-        {/* Table */}
+        {/* Content based on view mode */}
+        {viewMode === 'table' && (
         <Card>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -284,6 +335,15 @@ export default function SimpleDashboard() {
             </div>
           </CardContent>
         </Card>
+        )}
+
+        {viewMode === 'cards' && (
+          <CardsView companies={filteredCompanies} />
+        )}
+
+        {viewMode === 'map' && (
+          <MapView companies={filteredCompanies} />
+        )}
 
         <div className="mt-4 text-center text-sm text-muted-foreground">
           Showing {filteredCompanies.length} of {companies.length} companies
