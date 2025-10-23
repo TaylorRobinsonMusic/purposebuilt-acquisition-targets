@@ -12,7 +12,10 @@ import ColumnSelector from '@/components/ColumnSelector';
 import ViewModeSwitcher, { ViewMode } from '@/components/ViewModeSwitcher';
 import CardsView from '@/components/CardsView';
 import MapView from '@/components/MapView';
+import CompanyDetailModal from '@/components/CompanyDetailModal';
+import GroupingSelector, { GroupByOption } from '@/components/GroupingSelector';
 import { defaultColumns, getVisibleColumns } from '@/lib/columnDefinitions';
+import { groupCompanies } from '@/lib/groupingUtils';
 // import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 export default function SimpleDashboard() {
@@ -27,9 +30,14 @@ export default function SimpleDashboard() {
   const [columnConfig, setColumnConfig] = useState(() => 
     defaultColumns.map(col => ({ ...col, visible: col.visible }))
   );
+  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
+  const [groupBy, setGroupBy] = useState<GroupByOption>('none');
   // const [showFilterSheet, setShowFilterSheet] = useState(false);
 
   const columns = columnConfig.filter(col => col.visible);
+
+  // Group companies
+  const groupedCompanies = groupCompanies(filteredCompanies, groupBy);
 
   // Extract unique values for filter options
   const filterOptions = {
@@ -230,6 +238,8 @@ export default function SimpleDashboard() {
             />
           </div>
           
+          <GroupingSelector currentGrouping={groupBy} onGroupingChange={setGroupBy} />
+
           <ViewModeSwitcher currentView={viewMode} onViewChange={setViewMode} />
 
           <ColumnSelector columns={columnConfig} onColumnsChange={setColumnConfig} />
@@ -256,7 +266,7 @@ export default function SimpleDashboard() {
         </div>
 
         {/* Content based on view mode */}
-        {viewMode === 'table' && (
+        {viewMode === 'table' && groupBy === 'none' && (
         <Card>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
@@ -337,8 +347,75 @@ export default function SimpleDashboard() {
         </Card>
         )}
 
+        {viewMode === 'table' && groupBy !== 'none' && (
+          <div className="space-y-6">
+            {groupedCompanies.map((group) => (
+              <Card key={group.groupName}>
+                <CardContent className="p-0">
+                  <div className="bg-muted/50 px-6 py-3 border-b">
+                    <h3 className="font-semibold text-lg flex items-center gap-2">
+                      {group.groupName}
+                      <Badge variant="secondary">{group.companies.length}</Badge>
+                    </h3>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="border-b bg-muted/30">
+                        <tr>
+                          {columns.map((col) => (
+                            <th
+                              key={col.id}
+                              className="px-4 py-3 text-left text-sm font-medium cursor-pointer hover:bg-muted/50 transition-colors"
+                              style={{ width: col.width }}
+                              onClick={() => col.sortable && handleSort(col.accessor)}
+                            >
+                              <div className="flex items-center gap-2">
+                                {col.label}
+                                {col.sortable && sortConfig?.key === col.accessor && (
+                                  <span className="text-primary">
+                                    {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                                  </span>
+                                )}
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y">
+                        {group.companies.map((company, idx) => (
+                          <tr key={company.id || idx} className="hover:bg-muted/30 transition-colors">
+                            {columns.map((col) => (
+                              <td key={col.id} className="px-4 py-3 text-sm">
+                                {col.id === 'myRating' ? (
+                                  <InlineRating company={company} />
+                                ) : col.id === 'company' ? (
+                                  <div className="font-medium">{company[col.accessor as keyof Company]}</div>
+                                ) : col.id === 'description' ? (
+                                  <div className="max-w-md truncate text-muted-foreground">
+                                    {company[col.accessor as keyof Company]}
+                                  </div>
+                                ) : typeof company[col.accessor as keyof Company] === 'number' ? (
+                                  <span className="font-mono">
+                                    {(company[col.accessor as keyof Company] as number).toFixed(1)}
+                                  </span>
+                                ) : (
+                                  company[col.accessor as keyof Company]
+                                )}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
         {viewMode === 'cards' && (
-          <CardsView companies={filteredCompanies} />
+          <CardsView companies={filteredCompanies} onCompanyClick={setSelectedCompany} />
         )}
 
         {viewMode === 'map' && (
@@ -351,6 +428,12 @@ export default function SimpleDashboard() {
           Showing {columns.length} of {defaultColumns.length} columns
         </div>
       </div>
+
+      {/* Company Detail Modal */}
+      <CompanyDetailModal 
+        company={selectedCompany} 
+        onClose={() => setSelectedCompany(null)} 
+      />
     </div>
   );
 }
