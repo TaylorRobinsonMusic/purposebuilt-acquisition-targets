@@ -26,7 +26,7 @@ export default function SimpleDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [advancedFilters, setAdvancedFilters] = useState<any>({});
-  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>({ key: 'MA_Overall_Fit_Score', direction: 'desc' });
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [columnConfig, setColumnConfig] = useState(() => 
     defaultColumns.map(col => ({ ...col, visible: col.visible }))
@@ -113,10 +113,13 @@ export default function SimpleDashboard() {
   };
 
   const stats = {
-    total: filteredCompanies.length,
-    avgScore: filteredCompanies.length > 0
-      ? filteredCompanies.reduce((sum, c) => sum + (c['MA_Overall_Fit_Score'] || 0), 0) / filteredCompanies.length
-      : 0,
+    total: filteredCompanies.filter(c => c['MA_Overall_Fit_Score']).length,
+    avgScore: (() => {
+      const validScores = filteredCompanies.filter(c => c['MA_Overall_Fit_Score']);
+      return validScores.length > 0
+        ? validScores.reduce((sum, c) => sum + c['MA_Overall_Fit_Score'], 0) / validScores.length
+        : 0;
+    })(),
     avgRevenue: filteredCompanies.length > 0
       ? filteredCompanies.reduce((sum, c) => sum + (c['Revenue Estimate (MUSD)'] || 0), 0) / filteredCompanies.length
       : 0,
