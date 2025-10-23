@@ -157,7 +157,7 @@ export default function SimpleDashboard() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -185,9 +185,9 @@ export default function SimpleDashboard() {
       </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container py-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -238,8 +238,8 @@ export default function SimpleDashboard() {
         </div>
 
         {/* Search and Actions */}
-        <div className="flex gap-2 mb-6">
-          <div className="relative flex-1">
+        <div className="flex flex-wrap gap-2 mb-6">
+          <div className="relative flex-1 min-w-[280px] lg:min-w-[320px]">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search companies..."
@@ -320,7 +320,7 @@ export default function SimpleDashboard() {
                               <div className="text-xs text-muted-foreground">{company['Business Type']}</div>
                             </div>
                           ) : col.id === 'description' ? (
-                            <div className="max-w-md line-clamp-2 text-xs text-muted-foreground">
+                            <div className="max-w-md xl:max-w-lg 2xl:max-w-xl line-clamp-2 text-xs text-muted-foreground">
                               {company.Description?.substring(0, 150)}...
                             </div>
                           ) : col.id === 'revenue' ? (

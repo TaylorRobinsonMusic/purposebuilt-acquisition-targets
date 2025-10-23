@@ -166,7 +166,23 @@
     .container {
       padding-left: 2rem; /* 32px - desktop padding */
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1400px; /* Wider content width for large screens */
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      padding-left: 3rem; /* 48px - ultra-wide padding */
+      padding-right: 3rem;
+      max-width: 1600px; /* Ultra-wide content width */
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .container {
+      padding-left: 4rem; /* 64px - extra-wide padding */
+      padding-right: 4rem;
+      max-width: 1800px; /* Extra-wide content width */
     }
   }
 }
