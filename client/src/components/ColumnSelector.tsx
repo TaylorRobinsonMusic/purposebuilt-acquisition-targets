@@ -64,11 +64,11 @@ export default function ColumnSelector({ columns, onColumnsChange }: ColumnSelec
       <Button
         variant="outline"
         onClick={() => setIsOpen(!isOpen)}
-        className="gap-2 border-purple-500/50 text-purple-500 hover:bg-purple-500/10"
+        className="gap-2"
       >
         <Columns3 className="h-4 w-4" />
         Columns
-        <Badge className="ml-1 bg-purple-500 text-white">
+        <Badge variant="secondary" className="ml-1">
           {visibleCount}/{columns.length}
         </Badge>
       </Button>

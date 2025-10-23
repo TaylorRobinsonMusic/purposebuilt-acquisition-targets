@@ -235,7 +235,7 @@ export default function SimpleDashboard() {
               placeholder="Search companies..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 border-blue-500/50 focus:border-blue-500"
+              className="pl-10"
             />
           </div>
           
@@ -245,22 +245,22 @@ export default function SimpleDashboard() {
 
           <ColumnSelector columns={columnConfig} onColumnsChange={setColumnConfig} />
 
-          <Button variant="outline" className="gap-2 border-orange-500/50 text-orange-500 hover:bg-orange-500/10" disabled>
+          <Button variant="outline" className="gap-2" disabled>
             <Filter className="h-4 w-4" />
             Filters
             {activeFiltersCount > 0 && (
-              <Badge className="ml-1 bg-orange-500 text-white">{activeFiltersCount}</Badge>
+              <Badge variant="secondary" className="ml-1">{activeFiltersCount}</Badge>
             )}
           </Button>
 
           {activeFiltersCount > 0 && (
-            <Button variant="outline" onClick={clearAllFilters} className="gap-2 border-cyan-500/50 text-cyan-500 hover:bg-cyan-500/10">
+            <Button variant="outline" onClick={clearAllFilters} className="gap-2">
               <X className="h-4 w-4" />
               Clear All
             </Button>
           )}
 
-          <Button variant="outline" onClick={() => exportToCSV(filteredCompanies)} className="gap-2 border-orange-500/50 text-orange-500 hover:bg-orange-500/10">
+          <Button variant="outline" onClick={() => exportToCSV(filteredCompanies)} className="gap-2">
             <Download className="h-4 w-4" />
             CSV
           </Button>
@@ -306,12 +306,7 @@ export default function SimpleDashboard() {
                             </div>
                           ) : col.id === 'company' ? (
                             <div>
-                              <Badge 
-                                className="font-medium text-white mb-1"
-                                style={{ backgroundColor: getCompanyColor(company['Company name'] || '') }}
-                              >
-                                {company['Company name']}
-                              </Badge>
+                              <div className="font-medium text-foreground">{company['Company name']}</div>
                               <div className="text-xs text-muted-foreground">{company['Business Type']}</div>
                             </div>
                           ) : col.id === 'description' ? (
