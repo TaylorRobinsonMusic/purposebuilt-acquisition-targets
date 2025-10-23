@@ -164,24 +164,24 @@
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 1.5rem; /* 24px - desktop padding */
-      padding-right: 1.5rem;
+      padding-left: 1.25rem; /* 20px - desktop padding */
+      padding-right: 1.25rem;
       /* No max-width - allow full-width layout */
     }
   }
 
   @media (min-width: 1536px) {
     .container {
-      padding-left: 1.5rem; /* 24px - ultra-wide padding */
-      padding-right: 1.5rem;
+      padding-left: 1.25rem; /* 20px - ultra-wide padding */
+      padding-right: 1.25rem;
       /* No max-width - allow full-width layout */
     }
   }
 
   @media (min-width: 1920px) {
     .container {
-      padding-left: 1.5rem; /* 24px - extra-wide padding */
-      padding-right: 1.5rem;
+      padding-left: 1.25rem; /* 20px - extra-wide padding */
+      padding-right: 1.25rem;
       /* No max-width - allow full-width layout */
     }
   }
