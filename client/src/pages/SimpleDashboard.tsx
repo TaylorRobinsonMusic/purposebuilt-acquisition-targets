@@ -17,6 +17,7 @@ import GroupingSelector, { GroupByOption } from '@/components/GroupingSelector';
 import { defaultColumns, getVisibleColumns } from '@/lib/columnDefinitions';
 import { groupCompanies } from '@/lib/groupingUtils';
 import { getCompanyColor } from '@/lib/colorUtils';
+import { addCoordinatesToCompanies } from '@/lib/geocoding';
 // import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 export default function SimpleDashboard() {
@@ -50,8 +51,10 @@ export default function SimpleDashboard() {
   useEffect(() => {
     loadAcquisitionData()
       .then(data => {
-        setCompanies(data);
-        setFilteredCompanies(data);
+        // Add coordinates to companies for map view
+        const dataWithCoords = addCoordinatesToCompanies(data);
+        setCompanies(dataWithCoords);
+        setFilteredCompanies(dataWithCoords);
         setLoading(false);
       })
       .catch(err => {
